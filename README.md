@@ -1,16 +1,13 @@
-# USBcdc — STM32F103 上的 USB CDC 虚拟串口（非阻塞日志链路最小工程）
+# USBcdc — STM32F103 上的 USB CDC 虚拟串口
 
-**English abstract:** A minimal, self-contained STM32F103C8 firmware that exposes the MCU as a USB CDC
-virtual COM port backed by a 4 KB non-blocking TX FIFO, so `printf`-style logging never stalls a hard
-real-time control loop. Bare-metal (no RTOS); buildable with Keil MDK-ARM or CMake + `arm-none-eabi-gcc`.
 
-一个刻意做小的工程：**只做一件事 —— 把 STM32F103 变成一个扛得住实时控制回路的 USB 虚拟串口。**
+**把 STM32F103 变成一个扛得住实时控制回路的 USB 虚拟串口。**
 
 ---
 
-## 一、这个项目为什么必要
+## 一、这个项目
 
-STM32F103C8T6 是最普及的 Cortex-M3，而 RoboRTS 这类机器人固件跑在 F407 + FreeRTOS 上。
+STM32F103C8T6 是最普及的 Cortex-M3。
 把调试链路从 UART 换成 USB CDC 时，会撞上四个具体问题，这个工程就是为了把它们逐个解决并**可复现地**验证：
 
 ### 1. `printf` 不能阻塞控制回路
@@ -26,20 +23,6 @@ USB 全速是 **1 ms 帧、64 B 包**，天然是突发 + 高延迟的通道；�
 
 一根 USB 线同时供电 + 输出串口，不需要额外的 USB-TTL 转接板，也不占用宝贵的 UART。
 对于只剩一个 UART、又被电机/IMU 占满的小车平台，这是刚需。
-
-### 3. 把 RoboRTS 的 FIFO / 临界区层从 F407 + FreeRTOS 迁到 F103 裸机
-
-`USB/Middlewares/support/sys.h` 是 RoboRTS `sys.h` 的简化版，其源码注释写得很直白：
-「只保留 FIFO 库需要的基础定义，**去掉 F407/FreeRTOS 依赖**」。
-互斥用 `PRIMASK` 关中断实现（`enter_critical()` / `exit_critical()`），配合 `fifo.c` 的
-`*_noprotect` 接口做到「临界区包住 FIFO 操作本身」。
-
-这个工程就是这层移植的**最小可验证载体** —— 只有 USB + 一个回环，出了问题一眼能看出在哪。
-
-### 4. 从整机固件里剥出来，才能复现和回归
-
-USB 枚举失败、CDC 打开收不到数据、日志乱序 —— 这类问题埋在完整机器人固件里极难定位。
-这里只有一个 USB CDC、一个回环和一个 banner，把变量降到最少，便于单点复现、单点回归。
 
 ---
 
@@ -198,7 +181,5 @@ build.bat
 - `USB/Drivers/**`（STM32F1xx HAL + CMSIS）与 `USB/Middlewares/ST/**`（USB Device Library）
   是 STM32CubeMX 随附的 **ST 官方源码**，版权归 ST，请遵循其条款；
   `USB/Drivers/` 下各目录附有独立的 `LICENSE.txt`。
-- `USB/Middlewares/support/` 下的 `fifo.c` / `fifo.h` / `sys.h` 源自 RoboRTS 的 support 层，
-  已按 F103 裸机裁剪（去掉 F407 / FreeRTOS 依赖）。
 - 其余工程代码（`CMakeLists.txt`、`tools/`、`USB/USB_DEVICE/`、`USB/Core/` 中的用户代码段）
   尚未指定开源许可证。
