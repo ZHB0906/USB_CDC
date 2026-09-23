@@ -1,0 +1,19 @@
+﻿
+============================================================
+  Building USB CDC for STM32F103C8 ...
+============================================================
+powershell : arm-none-eabi-gcc.exe : E:\Robo\RoboRTS-Firmware-icra2021\USBcdc\USB\Core\Src\main.c:86:5: warning: confli
+cting types f
+At line:15 char:6019
++ ... lyContinue; powershell -ExecutionPolicy Bypass -File build.ps1 2>&1 | ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (arm-none-eabi-g...licting types f:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+or built-in function '_exit'; expected 'void(int)' [-Wbuiltin-declaration-mismatch]
+At E:\Robo\RoboRTS-Firmware-icra2021\USBcdc\build.ps1:90 char:1
++ & $CC @args_list 2>&1 | ForEach-Object { Write-Host $_ }
++ ~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (E:\Robo\RoboRTS...ation-mismatch]:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

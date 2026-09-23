@@ -1,0 +1,43 @@
+# ================= 构建产物 / Build output =================
+build/
+Build/
+out/
+Objects/
+Listings/
+
+*.o
+*.d
+*.elf
+*.hex
+*.bin
+*.map
+*.su
+*.axf
+*.crf
+*.lnp
+*.dep
+*.htm
+*.build_log.htm
+
+# ================= CMake =================
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# ================= Keil MDK 中间文件 / Keil intermediates =================
+# 工程文件 USB.uvprojx / USB.uvoptx / USB.uvguix.* / DebugConfig 均纳入版本控制
+*.uvguix.*.bak
+*.scvd
+JLinkLog.txt
+JLinkSettings.ini
+*.bak
+
+# ================= 操作系统 / 编辑器 =================
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*~
